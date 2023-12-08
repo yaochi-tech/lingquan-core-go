@@ -1,0 +1,1212 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schema.yaochi.tech/schema/model.json",
+  "type": "object",
+  "title": "model schema",
+  "description": "模型定义模式，用于定义模型的属性",
+  "required": [
+    "code",
+    "name",
+    "fields"
+  ],
+  "properties": {
+    "code": {
+      "$id": "#/properties/code",
+      "type": "string",
+      "title": "模型英文编码",
+      "description": "用于标识模型的英文编码，一般为小写字母，可以使用下划线",
+      "default": "",
+      "examples": [
+        "user"
+      ]
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "模型名称",
+      "description": "模型名称",
+      "default": "",
+      "examples": [
+        "用户"
+      ]
+    },
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "模型描述",
+      "description": "模型描述",
+      "default": "",
+      "examples": [
+        "用户模型"
+      ]
+    },
+    "comment": {
+      "$id": "#/properties/comment",
+      "type": "string",
+      "title": "模型表注释",
+      "description": "模型的表注释，用于生成表结构时使用",
+      "default": "",
+      "examples": [
+        "用户模型"
+      ]
+    },
+    "fields": {
+      "$id": "#/properties/fields",
+      "type": "array",
+      "title": "模型字段组成",
+      "description": "模型的组成字段",
+      "default": [],
+      "examples": [],
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/fields/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/fields/items/anyOf/0",
+            "type": "object",
+            "title": "模型主键字段",
+            "description": "模型主键字段",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "label"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "label": {
+                "$id": "#/properties/fields/items/anyOf/0/properties/label",
+                "type": "string",
+                "title": "字段中文名称",
+                "description": "字段中文显示名称",
+                "default": "",
+                "examples": [
+                  "主键"
+                ]
+              },
+              "name": {
+                "$id": "#/properties/fields/items/anyOf/0/properties/name",
+                "type": "string",
+                "title": "字段英文名称",
+                "description": "字段英文名称",
+                "default": "",
+                "examples": [
+                  "id"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/fields/items/anyOf/0/properties/type",
+                "type": "string",
+                "enum": [
+                  "ID"
+                ],
+                "title": "字段类型",
+                "description": "字段类型",
+                "default": "",
+                "examples": [
+                  "ID"
+                ]
+              }
+            }
+          },
+          {
+            "$id": "#/properties/fields/items/anyOf/1",
+            "type": "object",
+            "title": "模型普通字段",
+            "description": "模型普通字段",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "label"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "label": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/label",
+                "type": "string",
+                "title": "字段中文名称",
+                "description": "字段中文显示名称",
+                "default": "",
+                "examples": [
+                  "用户名"
+                ]
+              },
+              "name": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/name",
+                "type": "string",
+                "title": "字段英文名称",
+                "description": "字段英文名称",
+                "default": "",
+                "examples": [
+                  "username"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/type",
+                "type": "string",
+                "enum": [
+                  "string",
+                  "text",
+                  "json",
+                  "date",
+                  "datetime",
+                  "int",
+                  "int64",
+                  "bool"
+                ],
+                "title": "字段类型",
+                "description": "字段类型",
+                "default": "",
+                "examples": [
+                  "string"
+                ]
+              },
+              "comment": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/comment",
+                "type": "string",
+                "title": "字段注释",
+                "description": "字段注释",
+                "default": "",
+                "examples": [
+                  "用户名"
+                ]
+              },
+              "default": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/default",
+                "type": ["string", "number", "boolean"],
+                "title": "字段默认值",
+                "description": "字段默认值",
+                "default": "",
+                "examples": [
+                  "admin"
+                ]
+              },
+              "default_raw": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/default_raw",
+                "type": "string",
+                "title": "字段默认值",
+                "description": "字段默认值，优先级高于default，可使用数据库内置函数",
+                "default": "",
+                "examples": [
+                  "NOW()"
+                ]
+              },
+              "showInList": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/showInlist",
+                "type": "boolean",
+                "title": "是否在列表中显示",
+                "description": "是否在列表中显示",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "showable": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/showable",
+                "type": "boolean",
+                "title": "是否可查看",
+                "description": "是否可查看，如密码之类的应设置为false，不可传递到前端查看",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "queryCondition": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/queryCondition",
+                "type": "boolean",
+                "title": "是否可作为查询条件",
+                "description": "是否可作为查询条件, 如果是字符串将使用模糊查询，其他值则使用完全匹配",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "orderable": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/orderable",
+                "type": "boolean",
+                "title": "是否可排序",
+                "description": "是否可排序",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "required": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/required",
+                "type": "boolean",
+                "title": "是否必填",
+                "description": "新增时是否必填",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "index": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/index",
+                "type": ["boolean", "string"],
+                "title": "是否索引",
+                "description": "是否建立索引，如果为string类型，则为索引名称，如多个字段建立联合索引，可以使用相同的名称",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "unique": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/unique",
+                "type": ["boolean", "string"],
+                "title": "是否唯一",
+                "description": "是否唯一",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "length": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/length",
+                "type": "integer",
+                "title": "字段长度",
+                "description": "字段长度",
+                "default": 0,
+                "examples": [
+                  20
+                ]
+              },
+              "precision": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/precision",
+                "type": "integer",
+                "title": "字段精度",
+                "description": "字段精度",
+                "default": 0,
+                "examples": [
+                  2
+                ]
+              },
+              "scale": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/scale",
+                "type": "integer",
+                "title": "字段小数位",
+                "description": "字段小数位",
+                "default": 0,
+                "examples": [
+                  2
+                ]
+              },
+              "crypt": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/crypt",
+                "type": "string",
+                "title": "加密方式",
+                "description": "加密方式，可选AES,SM4,BCRYPT等",
+                "default": "",
+                "examples": [
+                  "AES"
+                ]
+              },
+              "validations": {
+                "$id": "#/properties/fields/items/anyOf/1/properties/validations",
+                "type": "array",
+                "title": "字段验证规则",
+                "description": "字段验证规则",
+                "default": [],
+                "examples": [],
+                "additionalItems": false,
+                "items": {
+                  "$id": "#/properties/fields/items/anyOf/1/properties/validations/items",
+                  "type": "object",
+                  "title": "字段验证规则",
+                  "description": "字段验证规则",
+                  "default": {},
+                  "examples": [],
+                  "required": [
+                    "type",
+                    "message"
+                  ],
+                  "additionalProperties": true,
+                  "properties": {
+                    "type": {
+                      "$id": "#/properties/fields/items/anyOf/1/properties/validations/items/properties/type",
+                      "type": "string",
+                      "enum": [
+                        "required",
+                        "email",
+                        "mobile",
+                        "url",
+                        "date",
+                        "dateISO",
+                        "number",
+                        "digits",
+                        "idcard",
+                        "equalTo",
+                        "maxlength",
+                        "minlength",
+                        "rangelength",
+                        "range",
+                        "max",
+                        "min"
+                      ],
+                      "title": "验证类型",
+                      "description": "验证类型",
+                      "default": "",
+                      "examples": [
+                        "required"
+                      ]
+                    },
+                    "message": {
+                      "$id": "#/properties/fields/items/anyOf/1/properties/validations/items/properties/message",
+                      "type": "string",
+                      "title": "验证提示",
+                      "description": "验证提示",
+                      "default": "",
+                      "examples": [
+                        "用户名不能为空"
+                      ]
+                    },
+                    "params": {
+                      "$id": "#/properties/fields/items/anyOf/1/properties/validations/items/properties/params",
+                      "type": "array",
+                      "title": "验证参数",
+                      "description": "验证参数",
+                      "default": [],
+                      "examples": [],
+                      "additionalItems": true,
+                      "items": {
+                        "$id": "#/properties/fields/items/anyOf/1/properties/validations/items/properties/params/items",
+                        "type": ["string", "number"],
+                        "title": "验证参数",
+                        "description": "验证参数",
+                        "default": "",
+                        "examples": [
+                          6
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "$id": "#/properties/fields/items/anyOf/2",
+            "type": "object",
+            "title": "模型枚举字段",
+            "description": "模型枚举字段",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "label",
+              "enum"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "label": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/label",
+                "type": "string",
+                "title": "字段中文名称",
+                "description": "字段中文显示名称",
+                "default": "",
+                "examples": [
+                  "用户名"
+                ]
+              },
+              "name": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/name",
+                "type": "string",
+                "title": "字段英文名称",
+                "description": "字段英文名称",
+                "default": "",
+                "examples": [
+                  "username"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/type",
+                "type": "string",
+                "enum": [
+                  "enum"
+                ],
+                "title": "字段类型",
+                "description": "字段类型",
+                "default": "",
+                "examples": [
+                  "string"
+                ]
+              },
+              "enumType": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/enumType",
+                "type": "string",
+                "enum": [
+                  "string",
+                  "int",
+                  "float"
+                ],
+                "title": "枚举类型",
+                "description": "枚举类型",
+                "default": "",
+                "examples": [
+                  "string"
+                ]
+              },
+              "comment": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/comment",
+                "type": "string",
+                "title": "字段注释",
+                "description": "字段注释",
+                "default": "",
+                "examples": [
+                  "用户名"
+                ]
+              },
+              "default": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/default",
+                "type": "string",
+                "title": "字段默认值",
+                "description": "字段默认值",
+                "default": "",
+                "examples": [
+                  "admin"
+                ]
+              },
+              "default_raw": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/default_raw",
+                "type": "string",
+                "title": "字段默认值",
+                "description": "字段默认值，优先级高于default，可使用数据库内置函数",
+                "default": "",
+                "examples": [
+                  "NOW()"
+                ]
+              },
+              "showInlist": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/showInlist",
+                "type": "boolean",
+                "title": "是否在列表中显示",
+                "description": "是否在列表中显示",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "showable": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/showable",
+                "type": "boolean",
+                "title": "是否可查看",
+                "description": "是否可查看，如密码之类的应设置为false，不可传递到前端查看",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "queryCondition": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/queryCondition",
+                "type": "boolean",
+                "title": "是否可作为查询条件",
+                "description": "是否可作为查询条件, 如果是字符串将使用模糊查询，其他值则使用完全匹配",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "orderable": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/orderable",
+                "type": "boolean",
+                "title": "是否可排序",
+                "description": "是否可排序",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "required": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/required",
+                "type": "boolean",
+                "title": "是否必填",
+                "description": "新增时是否必填",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "enum": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/enum",
+                "type": "array",
+                "title": "枚举值",
+                "description": "枚举值",
+                "default": [],
+                "examples": [],
+                "additionalItems": true,
+                "items": {
+                  "$id": "#/properties/fields/items/anyOf/2/properties/enum/items",
+                  "type": ["string", "number"],
+                  "title": "枚举值",
+                  "description": "枚举值",
+                  "default": "",
+                  "examples": [
+                    "admin",
+                    "user"
+                  ]
+                }
+              },
+              "index": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/index",
+                "type": ["boolean", "string"],
+                "title": "是否索引",
+                "description": "是否建立索引，如果为string类型，则为索引名称，如多个字段建立联合索引，可以使用相同的名称",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "unique": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/unique",
+                "type": "boolean",
+                "title": "是否唯一",
+                "description": "是否唯一",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "length": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/length",
+                "type": "integer",
+                "title": "字段长度",
+                "description": "字段长度",
+                "default": 0,
+                "examples": [
+                  20
+                ]
+              },
+              "precision": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/precision",
+                "type": "integer",
+                "title": "字段精度",
+                "description": "字段精度",
+                "default": 0,
+                "examples": [
+                  2
+                ]
+              },
+              "scale": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/scale",
+                "type": "integer",
+                "title": "字段小数位",
+                "description": "字段小数位",
+                "default": 0,
+                "examples": [
+                  2
+                ]
+              },
+              "validations": {
+                "$id": "#/properties/fields/items/anyOf/2/properties/validations",
+                "type": "array",
+                "title": "字段验证规则",
+                "description": "字段验证规则",
+                "default": [],
+                "examples": [],
+                "additionalItems": false,
+                "items": {
+                  "$id": "#/properties/fields/items/anyOf/2/properties/validations/items",
+                  "type": "object",
+                  "title": "字段验证规则",
+                  "description": "字段验证规则",
+                  "default": {},
+                  "examples": [],
+                  "required": [
+                    "type",
+                    "message"
+                  ],
+                  "additionalProperties": true,
+                  "properties": {
+                    "type": {
+                      "$id": "#/properties/fields/items/anyOf/2/properties/validations/items/properties/type",
+                      "type": "string",
+                      "enum": [
+                        "required"
+                      ],
+                      "title": "验证类型",
+                      "description": "验证类型",
+                      "default": "",
+                      "examples": [
+                        "required"
+                      ]
+                    },
+                    "message": {
+                      "$id": "#/properties/fields/items/anyOf/2/properties/validations/items/properties/message",
+                      "type": "string",
+                      "title": "验证提示",
+                      "description": "验证提示",
+                      "default": "",
+                      "examples": [
+                        "用户名不能为空"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "$id": "#/properties/fields/items/anyOf/3",
+            "type": "object",
+            "title": "模型浮点字段",
+            "description": "模型浮点字段",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "label"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "label": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/label",
+                "type": "string",
+                "title": "字段中文名称",
+                "description": "字段中文显示名称",
+                "default": "",
+                "examples": [
+                  "用户名"
+                ]
+              },
+              "name": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/name",
+                "type": "string",
+                "title": "字段英文名称",
+                "description": "字段英文名称",
+                "default": "",
+                "examples": [
+                  "username"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/type",
+                "type": "string",
+                "enum": [
+                  "float",
+                  "double"
+                ],
+                "title": "字段类型",
+                "description": "字段类型",
+                "default": "",
+                "examples": [
+                  "string"
+                ]
+              },
+              "comment": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/comment",
+                "type": "string",
+                "title": "字段注释",
+                "description": "字段注释",
+                "default": "",
+                "examples": [
+                  "用户名"
+                ]
+              },
+              "default": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/default",
+                "type": "number",
+                "title": "字段默认值",
+                "description": "字段默认值",
+                "default": "",
+                "examples": [
+                  0
+                ]
+              },
+              "default_raw": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/default_raw",
+                "type": "string",
+                "title": "字段默认值",
+                "description": "字段默认值，优先级高于default，可使用数据库内置函数",
+                "default": "",
+                "examples": [
+                  "NOW()"
+                ]
+              },
+              "showInlist": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/showInlist",
+                "type": "boolean",
+                "title": "是否在列表中显示",
+                "description": "是否在列表中显示",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "showable": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/showable",
+                "type": "boolean",
+                "title": "是否可查看",
+                "description": "是否可查看，如密码之类的应设置为false，不可传递到前端查看",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "queryCondition": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/queryCondition",
+                "type": "boolean",
+                "title": "是否可作为查询条件",
+                "description": "是否可作为查询条件, 如果是字符串将使用模糊查询，其他值则使用完全匹配",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "orderable": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/orderable",
+                "type": "boolean",
+                "title": "是否可排序",
+                "description": "是否可排序",
+                "default": true,
+                "examples": [
+                  true
+                ]
+              },
+              "required": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/required",
+                "type": "boolean",
+                "title": "是否必填",
+                "description": "新增时是否必填",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "index": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/index",
+                "type": ["boolean", "string"],
+                "title": "是否索引",
+                "description": "是否建立索引，如果为string类型，则为索引名称，如多个字段建立联合索引，可以使用相同的名称",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "unique": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/unique",
+                "type": "boolean",
+                "title": "是否唯一",
+                "description": "是否唯一",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              },
+              "length": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/length",
+                "type": "integer",
+                "title": "字段长度",
+                "description": "字段长度",
+                "default": 0,
+                "examples": [
+                  20
+                ]
+              },
+              "precision": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/precision",
+                "type": "integer",
+                "title": "字段精度",
+                "description": "字段精度",
+                "default": 0,
+                "examples": [
+                  2
+                ]
+              },
+              "scale": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/scale",
+                "type": "integer",
+                "title": "字段小数位",
+                "description": "字段小数位",
+                "default": 0,
+                "examples": [
+                  2
+                ]
+              },
+              "crypt": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/crypt",
+                "type": "string",
+                "title": "加密方式",
+                "description": "加密方式，可选AES,SM4,BCRYPT等",
+                "default": "",
+                "examples": [
+                  "AES"
+                ]
+              },
+              "validations": {
+                "$id": "#/properties/fields/items/anyOf/3/properties/validations",
+                "type": "array",
+                "title": "字段验证规则",
+                "description": "字段验证规则",
+                "default": [],
+                "examples": [],
+                "additionalItems": false,
+                "items": {
+                  "$id": "#/properties/fields/items/anyOf/3/properties/validations/items",
+                  "type": "object",
+                  "title": "字段验证规则",
+                  "description": "字段验证规则",
+                  "default": {},
+                  "examples": [],
+                  "required": [
+                    "type",
+                    "message"
+                  ],
+                  "additionalProperties": true,
+                  "properties": {
+                    "type": {
+                      "$id": "#/properties/fields/items/anyOf/3/properties/validations/items/properties/type",
+                      "type": "string",
+                      "enum": [
+                        "required",
+                        "email",
+                        "url",
+                        "date",
+                        "dateISO",
+                        "number",
+                        "digits",
+                        "idcard",
+                        "equalTo",
+                        "maxlength",
+                        "minlength",
+                        "rangelength",
+                        "range",
+                        "max",
+                        "min"
+                      ],
+                      "title": "验证类型",
+                      "description": "验证类型",
+                      "default": "",
+                      "examples": [
+                        "required"
+                      ]
+                    },
+                    "message": {
+                      "$id": "#/properties/fields/items/anyOf/3/properties/validations/items/properties/message",
+                      "type": "string",
+                      "title": "验证提示",
+                      "description": "验证提示",
+                      "default": "",
+                      "examples": [
+                        "用户名不能为空"
+                      ]
+                    },
+                    "params": {
+                      "$id": "#/properties/fields/items/anyOf/3/properties/validations/items/properties/params",
+                      "type": "array",
+                      "title": "验证参数",
+                      "description": "验证参数",
+                      "default": [],
+                      "examples": [],
+                      "additionalItems": true,
+                      "items": {
+                        "$id": "#/properties/fields/items/anyOf/3/properties/validations/items/properties/params/items",
+                        "type": ["string", "number"],
+                        "title": "验证参数",
+                        "description": "验证参数",
+                        "default": "",
+                        "examples": [
+                          6
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "relations": {
+      "$id": "#/properties/relations",
+      "type": "array",
+      "title": "模型关系",
+      "description": "模型关系",
+      "default": [],
+      "examples": [],
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/relations/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/relations/items/anyOf/0",
+            "type": "object",
+            "title": "模型关系属于",
+            "description": "模型属于关系，该模型需有属于的模型的id字段",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "model",
+              "field"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "name": {
+                "$id": "#/properties/relations/items/anyOf/0/properties/name",
+                "type": "string",
+                "title": "关系名称",
+                "description": "关系名称",
+                "default": "",
+                "examples": [
+                  "我的角色"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/relations/items/anyOf/0/properties/type",
+                "type": "string",
+                "enum": [
+                  "belongsTo"
+                ],
+                "title": "关系类型",
+                "description": "关系类型",
+                "default": "",
+                "examples": [
+                  "belongsTo"
+                ]
+              },
+              "model": {
+                "$id": "#/properties/relations/items/anyOf/0/properties/model",
+                "type": "string",
+                "title": "关联模型",
+                "description": "关联模型",
+                "default": "",
+                "examples": [
+                  "role"
+                ]
+              },
+              "field": {
+                "$id": "#/properties/relations/items/anyOf/0/properties/field",
+                "type": "string",
+                "title": "关联字段",
+                "description": "关联字段",
+                "default": "",
+                "examples": [
+                  "role_id"
+                ]
+              }
+            }
+          },
+          {
+            "$id": "#/properties/relations/items/anyOf/1",
+            "type": "object",
+            "title": "模型关系",
+            "description": "模型关系",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "model",
+              "field"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "name": {
+                "$id": "#/properties/relations/items/anyOf/1/properties/name",
+                "type": "string",
+                "title": "关系名称拥有",
+                "description": "关系名称拥有，在被拥有对象模型中必须有本模型的id字段",
+                "default": "",
+                "examples": [
+                  "user"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/relations/items/anyOf/1/properties/type",
+                "type": "string",
+                "enum": [
+                  "hasOne",
+                  "hasMany"
+                ],
+                "title": "关系类型",
+                "description": "关系类型",
+                "default": "",
+                "examples": [
+                  "hasMany"
+                ]
+              },
+              "model": {
+                "$id": "#/properties/relations/items/anyOf/1/properties/model",
+                "type": "string",
+                "title": "关联模型",
+                "description": "关联模型",
+                "default": "",
+                "examples": [
+                  "user"
+                ]
+              },
+              "field": {
+                "$id": "#/properties/relations/items/anyOf/1/properties/field",
+                "type": "string",
+                "title": "关联字段",
+                "description": "关联字段",
+                "default": "",
+                "examples": [
+                  "class_id"
+                ]
+              }
+            }
+          },
+          {
+            "$id": "#/properties/relations/items/anyOf/2",
+            "type": "object",
+            "title": "模型关系中间表",
+            "description": "模型关系中间表来标识的情况",
+            "default": {},
+            "examples": [],
+            "required": [
+              "name",
+              "type",
+              "model",
+              "pivot"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "name": {
+                "$id": "#/properties/relations/items/anyOf/2/properties/name",
+                "type": "string",
+                "title": "关系名称",
+                "description": "关系名称",
+                "default": "",
+                "examples": [
+                  "user"
+                ]
+              },
+              "type": {
+                "$id": "#/properties/relations/items/anyOf/2/properties/type",
+                "type": "string",
+                "enum": [
+                  "manyToMany"
+                ],
+                "title": "关系类型",
+                "description": "关系类型",
+                "default": "",
+                "examples": [
+                  "manyToMany"
+                ]
+              },
+              "model": {
+                "$id": "#/properties/relations/items/anyOf/2/properties/model",
+                "type": "string",
+                "title": "关联模型",
+                "description": "关联模型",
+                "default": "",
+                "examples": [
+                  "user"
+                ]
+              },
+              "pivot": {
+                "$id": "#/properties/relations/items/anyOf/2/properties/pivot",
+                "type": "object",
+                "title": "中间表",
+                "description": "中间表",
+                "default": {},
+                "examples": [],
+                "required": [
+                  "table",
+                  "foreign_key",
+                  "local_key"
+                ],
+                "additionalProperties": true,
+                "properties": {
+                  "table": {
+                    "$id": "#/properties/relations/items/anyOf/2/properties/pivot/properties/table",
+                    "type": "string",
+                    "title": "中间表名称",
+                    "description": "中间表名称",
+                    "default": "",
+                    "examples": [
+                      "user_role"
+                    ]
+                  },
+                  "foreign_key": {
+                    "$id": "#/properties/relations/items/anyOf/2/properties/pivot/properties/foreign_key",
+                    "type": "string",
+                    "title": "中间表外键",
+                    "description": "中间表外键",
+                    "default": "",
+                    "examples": [
+                      "role_id"
+                    ]
+                  },
+                  "local_key": {
+                    "$id": "#/properties/relations/items/anyOf/0/properties/pivot/properties/local_key",
+                    "type": "string",
+                    "title": "中间表本地键",
+                    "description": "中间表本地键",
+                    "default": "",
+                    "examples": [
+                      "user_id"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "options": {
+      "$id": "#/properties/options",
+      "type": "object",
+      "title": "模型选项",
+      "description": "模型选项",
+      "default": {},
+      "examples": [],
+      "additionalProperties": true,
+      "properties": {
+        "timestamps": {
+          "$id": "#/properties/options/properties/timestamps",
+          "type": "boolean",
+          "title": "是否自动维护时间戳",
+          "description": "是否自动维护时间戳，包括created_at和updated_at字段",
+          "default": true,
+          "examples": [
+            true
+          ]
+        },
+        "softDeletes": {
+          "$id": "#/properties/options/properties/softDeletes",
+          "type": "boolean",
+          "title": "是否软删除",
+          "description": "是否软删除，包括deleted_at字段",
+          "default": false,
+          "examples": [
+            true
+          ]
+        }
+      }
+    },
+    "values": {
+      "$id": "#/properties/values",
+      "type": "array",
+      "title": "模型数据",
+      "description": "模型数据，用于初始化数据",
+      "default": [],
+      "examples": [],
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/values/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/values/items/anyOf/0",
+            "type": "object",
+            "title": "模型数据",
+            "description": "模型数据",
+            "default": {},
+            "examples": [],
+            "additionalProperties": true,
+            "properties": {}
+          }
+        ]
+      }
+    }
+  }
+}
