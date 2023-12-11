@@ -3,9 +3,9 @@ package db
 import (
 	"errors"
 	"github.com/jmoiron/sqlx"
-	"github.com/yaochi-tech/lingquan-core-go/db/clause"
 	"github.com/yaochi-tech/lingquan-core-go/db/dialect"
 	"github.com/yaochi-tech/lingquan-core-go/db/schema"
+	"github.com/yaochi-tech/lingquan-core-go/util"
 	"sync"
 )
 
@@ -167,18 +167,18 @@ func (engine *Engine) Migrate() error {
 }
 
 // Insert 插入数据
-func (engine *Engine) Insert(name string, datas ...map[string]interface{}) (int64, error) {
+func (engine *Engine) Insert(name string, data ...map[string]interface{}) (int64, error) {
 	s := engine.GetSchema(name)
 	if s == nil {
 		return 0, nil
 	}
 
-	c := new(clause.Clause)
-	c.Set(clause.INSERT, s.Name, s.Fields)
-	for _, data := range datas {
-		c.Set(clause.VALUES, data)
+	// BuildInsert会对data的key转换为蛇形命名
+	sql, args, err := engine.dialect.BuildInsert(s.TableName, data)
+	if err != nil {
+		return 0, err
 	}
-	sql, args := c.Build()
+
 	res, err := engine.DB.Exec(sql, args...)
 	if err != nil {
 		return 0, err
@@ -187,19 +187,23 @@ func (engine *Engine) Insert(name string, datas ...map[string]interface{}) (int6
 }
 
 // Find 查询数据, where中的条件使用命名参数，如：where = "id = :id", namedCondition = map[string]interface{}{"id": 1}
-func (engine *Engine) Find(name, where string, namedCondition map[string]interface{}, limit, offset int, orderBy string) ([]map[string]interface{}, error) {
+func (engine *Engine) Find(name string, namedCondition map[string]interface{}, selectFields []string) ([]map[string]interface{}, error) {
 	s := engine.GetSchema(name)
 	if s == nil {
 		return nil, nil
 	}
 
-	c := new(clause.Clause)
-	c.Set(clause.SELECT, s.Name, s.Fields)
-	c.Set(clause.WHERE, where, namedCondition)
-	c.Set(clause.LIMIT, limit)
-	c.Set(clause.OFFSET, offset)
-	c.Set(clause.ORDERBY, orderBy)
-	sql, args := c.Build()
+	// namedCondition中的key转换为蛇形命名
+	where := make(map[string]interface{}, len(namedCondition))
+	for k, v := range namedCondition {
+		where[util.ToSnake(k)] = v
+	}
+
+	sql, args, err := engine.dialect.BuildSelect(s.TableName, selectFields, where)
+	if err != nil {
+		return nil, err
+	}
+
 	rows, err := engine.DB.Queryx(sql, args...)
 	if err != nil {
 		return nil, err
@@ -219,16 +223,22 @@ func (engine *Engine) Find(name, where string, namedCondition map[string]interfa
 }
 
 // Update 更新数据, where中的条件使用命名参数，如：where = "id = :id", namedCondition = map[string]interface{}{"id": 1}
-func (engine *Engine) Update(name, where string, namedCondition, data map[string]interface{}) (int64, error) {
+func (engine *Engine) Update(name string, namedCondition, data map[string]interface{}) (int64, error) {
 	s := engine.GetSchema(name)
 	if s == nil {
 		return 0, nil
 	}
 
-	c := new(clause.Clause)
-	c.Set(clause.UPDATE, s.Name, data)
-	c.Set(clause.WHERE, where, namedCondition)
-	sql, args := c.Build()
+	where := make(map[string]interface{}, len(namedCondition))
+	for k, v := range namedCondition {
+		where[util.ToSnake(k)] = v
+	}
+
+	sql, args, err := engine.dialect.BuildUpdate(s.TableName, where, data)
+	if err != nil {
+		return 0, err
+	}
+
 	res, err := engine.DB.Exec(sql, args...)
 	if err != nil {
 		return 0, err
@@ -237,62 +247,30 @@ func (engine *Engine) Update(name, where string, namedCondition, data map[string
 }
 
 // Delete 删除数据, where中的条件使用命名参数，如：where = "id = :id", namedCondition = map[string]interface{}{"id": 1}，注意，delete方法必须有where条件
-func (engine *Engine) Delete(name, where string, namedCondition map[string]interface{}) (int64, error) {
+func (engine *Engine) Delete(name string, namedCondition map[string]interface{}) (int64, error) {
 	s := engine.GetSchema(name)
 	if s == nil {
 		return 0, nil
 	}
 
 	// 判断where条件是否存在
-	if where == "" {
+	if len(namedCondition) == 0 {
 		return 0, errors.New("delete method must have where condition")
 	}
 
-	c := new(clause.Clause)
-	c.Set(clause.DELETE, s.Name)
-	c.Set(clause.WHERE, where, namedCondition)
-	sql, args := c.Build()
+	where := make(map[string]interface{}, len(namedCondition))
+	for k, v := range namedCondition {
+		where[util.ToSnake(k)] = v
+	}
+
+	sql, args, err := engine.dialect.BuildDelete(s.TableName, where)
+	if err != nil {
+		return 0, err
+	}
+
 	res, err := engine.DB.Exec(sql, args...)
 	if err != nil {
 		return 0, err
 	}
 	return res.RowsAffected()
-}
-
-// Count 统计数据, where中的条件使用命名参数，如：where = "id = :id", namedCondition = map[string]interface{}{"id": 1}
-func (engine *Engine) Count(name, where string, namedCondition map[string]interface{}) (int64, error) {
-	s := engine.GetSchema(name)
-	if s == nil {
-		return 0, nil
-	}
-
-	c := new(clause.Clause)
-	c.Set(clause.COUNT, s.Name)
-	c.Set(clause.WHERE, where, namedCondition)
-	sql, args := c.Build()
-	var count int64
-	err := engine.DB.Get(&count, sql, args...)
-	if err != nil {
-		return 0, err
-	}
-	return count, nil
-}
-
-// First 查询第一条数据, where中的条件使用命名参数，如：where = "id = :id", namedCondition = map[string]interface{}{"id": 1}
-func (engine *Engine) First(name, where string, namedCondition map[string]interface{}) (map[string]interface{}, error) {
-	s := engine.GetSchema(name)
-	if s == nil {
-		return nil, nil
-	}
-
-	// 可以直接调用Find方法
-	results, err := engine.Find(name, where, namedCondition, 1, 0, "")
-
-	if err != nil {
-		return nil, err
-	}
-	if len(results) == 0 {
-		return nil, nil
-	}
-	return results[0], nil
 }

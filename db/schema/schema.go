@@ -3,7 +3,8 @@ package schema
 import (
 	"fmt"
 	"github.com/tidwall/gjson"
-	"github.com/yaochi-tech/lingquan-core-go/db/util"
+	"github.com/yaochi-tech/lingquan-core-go/util"
+
 	"strings"
 )
 

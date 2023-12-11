@@ -1,0 +1,25 @@
+package dialect
+
+const (
+	OP_IN          = "in"
+	OP_LIKE        = "like"
+	OP_NOT_LIKE    = "not like"
+	OP_BETWEEN     = "between"
+	OP_NOT_BETWEEN = "not between"
+	OP_IS_NULL     = "is null"
+	OP_IS_NOT_NULL = "is not null"
+	OP_EQ          = "="
+	OP_NEQ         = "!="
+	OP_GT          = ">"
+	OP_GTE         = ">="
+	OP_LT          = "<"
+	OP_LTE         = "<="
+	OP_IS          = "is"
+	OP_OR          = "$or"
+	OP_AND         = "$and"
+	OP_LIMIT       = "$limit"
+	OP_OFFSET      = "$offset"
+	OP_ORDER_BY    = "$order_by"
+	OP_GROUP_BY    = "$group_by"
+	OP_HAVING      = "$having"
+)

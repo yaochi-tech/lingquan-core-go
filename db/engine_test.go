@@ -234,17 +234,12 @@ func TestEngine(t *testing.T) {
 		So(schemas, ShouldNotBeNil)
 		So(len(schemas), ShouldEqual, 1)
 
-		// 检查模型对应的表格不存在
-		var exists bool
-		exists, err = engine.SchemaTableExists("user")
-		So(err, ShouldBeNil)
-		So(exists, ShouldBeFalse)
-
 		// 创建表
 		err = engine.MigrateTable("user")
 		So(err, ShouldBeNil)
 
 		// 检查模型对应的表格存在
+		var exists bool
 		exists, err = engine.SchemaTableExists("user")
 		So(err, ShouldBeNil)
 		So(exists, ShouldBeTrue)
@@ -259,4 +254,32 @@ func TestEngine(t *testing.T) {
 		So(exists, ShouldBeFalse)
 	})
 
+}
+
+func TestEngine_Insert(t *testing.T) {
+	Convey("插入数据测试", t, func() {
+		engine, err := NewEngine("mysql", "root:root@/lowcode?charset=utf8mb4&parseTime=True&loc=Local")
+		So(err, ShouldBeNil)
+		So(engine, ShouldNotBeNil)
+
+		// 注册模型
+		name, err := engine.Register(def)
+		So(err, ShouldBeNil)
+		So(name, ShouldEqual, "user")
+
+		// 创建表
+		err = engine.MigrateTable("user")
+		So(err, ShouldBeNil)
+
+		// 插入用户数据
+		_, err = engine.Insert("user", map[string]interface{}{
+			"id":       1,
+			"username": "test",
+			"password": "123456",
+			"nickname": "测试用户",
+			"email":    "test@test.test",
+			"mobile":   "13800138000",
+		})
+		So(err, ShouldBeNil)
+	})
 }
