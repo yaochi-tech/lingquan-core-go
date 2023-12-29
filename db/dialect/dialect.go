@@ -39,11 +39,11 @@ func GetDialect(name string) (dialect Dialect, ok bool) {
 	return
 }
 
-type dialectImpl struct {
-	dialect goqu.DialectWrapper
+type DialectWrapper struct {
+	Dialect goqu.DialectWrapper
 }
 
-func (m *dialectImpl) CreateTableSQL(schema *schema.Schema) string {
+func (m *DialectWrapper) CreateTableSQL(schema *schema.Schema) string {
 	var columns []string
 	var primaryKeys []string
 	for _, field := range schema.Fields {
@@ -66,11 +66,11 @@ func (m *dialectImpl) CreateTableSQL(schema *schema.Schema) string {
 	return sql.String()
 }
 
-func (m *dialectImpl) DropTableSQL(schema *schema.Schema) string {
+func (m *DialectWrapper) DropTableSQL(schema *schema.Schema) string {
 	return "DROP TABLE IF EXISTS `" + schema.TableName + "`"
 }
 
-func (m *dialectImpl) DataTypeOf(typ string) string {
+func (m *DialectWrapper) DataTypeOf(typ string) string {
 	t := strings.ToLower(typ)
 	switch t {
 	case "string":
@@ -93,16 +93,16 @@ func (m *dialectImpl) DataTypeOf(typ string) string {
 	panic("invalid sql type " + typ)
 }
 
-func (m *dialectImpl) CurrentDatabaseSQL() string {
+func (m *DialectWrapper) CurrentDatabaseSQL() string {
 	return "SELECT DATABASE()"
 }
 
-func (m *dialectImpl) TableExistSQL(tableName, dbName string) (string, []interface{}) {
+func (m *DialectWrapper) TableExistSQL(tableName, dbName string) (string, []interface{}) {
 	args := []interface{}{tableName, dbName}
 	return "SELECT TABLE_NAME FROM information_schema.tables WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ? ", args
 }
 
-func (m *dialectImpl) columnSQL(field *schema.Field) string {
+func (m *DialectWrapper) columnSQL(field *schema.Field) string {
 	var sql strings.Builder
 	sql.WriteString("`" + field.Name + "`")
 
@@ -145,7 +145,7 @@ func (m *dialectImpl) columnSQL(field *schema.Field) string {
 	return sql.String()
 }
 
-func (m *dialectImpl) BuildInsert(tableName string, dataList []map[string]interface{}) (string, []interface{}, error) {
+func (m *DialectWrapper) BuildInsert(tableName string, dataList []map[string]interface{}) (string, []interface{}, error) {
 	// dataList中的key转蛇形命名
 	var snakeDataList []interface{}
 	for _, data := range dataList {
@@ -155,17 +155,17 @@ func (m *dialectImpl) BuildInsert(tableName string, dataList []map[string]interf
 		}
 		snakeDataList = append(snakeDataList, snakeData)
 	}
-	return m.dialect.Insert(tableName).Rows(snakeDataList...).ToSQL()
+	return m.Dialect.Insert(tableName).Rows(snakeDataList...).ToSQL()
 }
 
-func (m *dialectImpl) BuildSelect(tableName string, selectFields []string, where map[string]interface{}) (string, []interface{}, error) {
+func (m *DialectWrapper) BuildSelect(tableName string, selectFields []string, where map[string]interface{}) (string, []interface{}, error) {
 	// selectFields转蛇形命名
 	var snakeSelectFields []interface{}
 	for _, field := range selectFields {
 		snakeSelectFields = append(snakeSelectFields, util.ToSnake(field))
 	}
 
-	ds := m.dialect.From(tableName).Select(snakeSelectFields...)
+	ds := m.Dialect.From(tableName).Select(snakeSelectFields...)
 	// where要处理成goqu的where语句
 	var whereExList []goqu.Expression
 	whereExList = whereExpression(where)
@@ -343,11 +343,11 @@ func whereExpression(m map[string]interface{}) []goqu.Expression {
 	return whereExList
 }
 
-func (m *dialectImpl) BuildUpdate(tableName string, updateData, where map[string]interface{}) (string, []interface{}, error) {
+func (m *DialectWrapper) BuildUpdate(tableName string, updateData, where map[string]interface{}) (string, []interface{}, error) {
 	// where要处理成goqu的where语句
 	whereExList := whereExpression(where)
 
-	ds := m.dialect.Update(tableName)
+	ds := m.Dialect.Update(tableName)
 	// updateData中的key转蛇形命名
 	var snakeUpdateData map[string]interface{}
 	for k, v := range updateData {
@@ -361,11 +361,11 @@ func (m *dialectImpl) BuildUpdate(tableName string, updateData, where map[string
 	return ds.ToSQL()
 }
 
-func (m *dialectImpl) BuildDelete(tableName string, where map[string]interface{}) (string, []interface{}, error) {
+func (m *DialectWrapper) BuildDelete(tableName string, where map[string]interface{}) (string, []interface{}, error) {
 	// where要处理成goqu的where语句
 	whereExList := whereExpression(where)
 
-	ds := m.dialect.Delete(tableName)
+	ds := m.Dialect.Delete(tableName)
 
 	ds = ds.Where(whereExList...)
 

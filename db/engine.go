@@ -223,7 +223,7 @@ func (engine *Engine) Find(name string, namedCondition map[string]interface{}, s
 }
 
 // Update 更新数据, where中的条件使用命名参数，如：where = "id = :id", namedCondition = map[string]interface{}{"id": 1}
-func (engine *Engine) Update(name string, namedCondition, data map[string]interface{}) (int64, error) {
+func (engine *Engine) Update(name string, data, namedCondition map[string]interface{}) (int64, error) {
 	s := engine.GetSchema(name)
 	if s == nil {
 		return 0, nil
